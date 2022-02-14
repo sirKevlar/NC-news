@@ -1,4 +1,4 @@
-# Northcoders News API
+# Welcome to NC News
 
 ## Background
 
