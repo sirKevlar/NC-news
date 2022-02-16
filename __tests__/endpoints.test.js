@@ -37,6 +37,24 @@ describe('Endpoints', () => {
     });
   });
 
+  describe('GET /api/users', () => {
+    test('status 200: responds with array of user objects', () => {
+      return request(app)
+        .get('/api/users')
+        .expect(200)
+        .then(({ body: { users } }) => {
+          expect(users).toHaveLength(4);
+          expect(users[0]).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            })
+          );
+        });
+    });
+  });
+
   describe('GET /api/article/:article_id', () => {
     test('status 200: responds with article object', () => {
       return request(app)
@@ -71,7 +89,7 @@ describe('Endpoints', () => {
         });
     });
   });
-  describe.only('PATCH /api/articles/:article_id', () => {
+  describe('PATCH /api/articles/:article_id', () => {
     test('status 201: article created', () => {
       return request(app)
         .patch('/api/articles/1')
