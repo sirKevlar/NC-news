@@ -20,6 +20,13 @@ exports.selectArticleById = (article_id) => {
 };
 
 exports.updateArticleById = (article_id, votes) => {
+  if (!votes) {
+    return Promise.reject({
+      status: 400,
+      msg: 'Bad patch body',
+    });
+  }
+
   return db
     .query(
       `
@@ -31,6 +38,11 @@ exports.updateArticleById = (article_id, votes) => {
       [votes, article_id]
     )
     .then(({ rows }) => {
-      return rows[0];
+      if (rows.length < 1) {
+        return Promise.reject({
+          status: 404,
+          msg: 'ID not found',
+        });
+      } else return rows[0];
     });
 };
