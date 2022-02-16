@@ -55,7 +55,28 @@ describe('Endpoints', () => {
     });
   });
 
-  describe('GET /api/article/:article_id', () => {
+  describe('GET /api/articles', () => {
+    test('status 200: responds with array of article objects', () => {
+      return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toHaveLength(12);
+          expect(articles[0]).toEqual(
+            expect.objectContaining({
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+            })
+          );
+        });
+    });
+  });
+
+  describe('GET /api/articles/:article_id', () => {
     test('status 200: responds with article object', () => {
       return request(app)
         .get('/api/article/2')
