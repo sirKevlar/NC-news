@@ -89,5 +89,41 @@ describe('Endpoints', () => {
           });
         });
     });
+    test('status 400: invalid id responds with msg Bad request', () => {
+      return request(app)
+        .patch('/api/articles/not-a-number')
+        .send({ inc_votes: 7 })
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe('Bad request');
+        });
+    });
+    test('status 404: valid but non-existent id responds with msg ID not found', () => {
+      return request(app)
+        .patch('/api/articles/7777777')
+        .send({ inc_votes: 7 })
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe('ID not found');
+        });
+    });
+    test('status 400: Bad request patch body key not greenlisted', () => {
+      return request(app)
+        .patch('/api/articles/1')
+        .send({ wrong_key: 100 })
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe('Bad patch body');
+        });
+    });
+    test('status 400: Bad request patch body value not valid', () => {
+      return request(app)
+        .patch('/api/articles/1')
+        .send({ inc_votes: 'not-a-number' })
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe('Bad request');
+        });
+    });
   });
 });
