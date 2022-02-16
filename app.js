@@ -1,11 +1,12 @@
 const express = require('express');
-const cors = require('cors');
+// const cors = require('cors');
+const { getTopics } = require('./controllers/games-controllers');
 
 const app = express();
 
-app.use(cors())
-app.use(express.json())
+// app.use(cors())
+app.use(express.json());
 
-// app.get
+app.get('/api/topics', getTopics);
 
 module.exports = app;
