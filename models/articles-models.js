@@ -1,5 +1,11 @@
 const db = require('../db/connection');
 
+exports.selectArticles = () => {
+  return db.query(`SELECT * FROM articles;`).then(({ rows }) => {
+    return rows;
+  });
+}
+
 exports.selectArticleById = (article_id) => {
   return db
     .query(
