@@ -1,9 +1,7 @@
 const express = require('express');
 // const cors = require('cors');
-const {
-  getTopics,
-  getArticleById,
-} = require('./controllers/games-controllers');
+const { getArticleById, patchArticleById } = require('./controllers/articles-controllers');
+const { getTopics } = require('./controllers/topics-controllers');
 const {
   invalidPath,
   serverError,
@@ -18,6 +16,8 @@ app.use(express.json());
 
 app.get('/api/topics', getTopics);
 app.get('/api/article/:article_id', getArticleById);
+
+app.patch('/api/articles/:article_id', patchArticleById);
 
 app.all('/*', invalidPath);
 
