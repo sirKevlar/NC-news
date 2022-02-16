@@ -62,12 +62,31 @@ describe('Endpoints', () => {
           expect(body.msg).toBe('Bad request');
         });
     });
-    test.only('status 404: valid but non-existent id responds with msg ID not found', () => {
+    test('status 404: valid but non-existent id responds with msg ID not found', () => {
       return request(app)
         .get('/api/article/7777777')
         .expect(404)
         .then(({ body }) => {
           expect(body.msg).toBe('ID not found');
+        });
+    });
+  });
+  describe.only('PATCH /api/articles/:article_id', () => {
+    test('status 201: article created', () => {
+      return request(app)
+        .patch('/api/articles/1')
+        .send({ inc_votes: 7 })
+        .expect(201)
+        .then(({ body }) => {
+          expect(body.article).toEqual({
+            article_id: 1,
+            title: 'Living in the shadow of a great man',
+            topic: 'mitch',
+            author: 'butter_bridge',
+            body: 'I find this existence challenging',
+            created_at: '2020-07-09T20:11:00.000Z',
+            votes: 107,
+          });
         });
     });
   });
