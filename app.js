@@ -5,6 +5,7 @@ const {
   patchArticleById,
   getArticles,
 } = require('./controllers/articles-controllers');
+const { postCommentByArticleId } = require('./controllers/comments-controllers');
 const { getTopics } = require('./controllers/topics-controllers');
 const { getUsers } = require('./controllers/users-controllers');
 const {
@@ -25,6 +26,7 @@ app.get('/api/articles', getArticles);
 app.get('/api/article/:article_id', getArticleById);
 
 app.patch('/api/articles/:article_id', patchArticleById);
+app.post('/api/articles/:article_id/comments', postCommentByArticleId)
 
 app.all('/*', invalidPath);
 
