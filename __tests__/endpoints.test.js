@@ -19,7 +19,7 @@ describe('Endpoints', () => {
         });
     });
   });
-
+  /*-------TOPICS-------*/
   describe('GET /api/topics', () => {
     test('status 200: responds with array of topic objects', () => {
       return request(app)
@@ -36,7 +36,7 @@ describe('Endpoints', () => {
         });
     });
   });
-
+  /*-------USERS-------*/
   describe('GET /api/users', () => {
     test('status 200: responds with array of user objects', () => {
       return request(app)
@@ -54,7 +54,7 @@ describe('Endpoints', () => {
         });
     });
   });
-
+  /*-------ARTICLES-------*/
   describe('GET /api/articles', () => {
     test('status 200: responds with array of article objects', () => {
       return request(app)
@@ -113,7 +113,7 @@ describe('Endpoints', () => {
   });
 
   describe('PATCH /api/articles/:article_id', () => {
-    test('status 201: article created', () => {
+    test('status 201: article patched', () => {
       return request(app)
         .patch('/api/articles/1')
         .send({ inc_votes: 7 })
@@ -164,6 +164,26 @@ describe('Endpoints', () => {
         .expect(400)
         .then(({ body }) => {
           expect(body.msg).toBe('Bad request');
+        });
+    });
+  });
+
+  describe('POST /api/articles/:article_id/comments', () => {
+    test('status 201: comment created', () => {
+      return request(app)
+        .post('/api/articles/2/comments')
+        .send({ username: 'icellusedkars', body: 'So good it hurts' })
+        .expect(201)
+        .then(({ body: { comment } }) => {
+          expect(comment[0]).toEqual(
+            expect.objectContaining({
+              body: 'So good it hurts',
+              votes: 0,
+              author: 'icellusedkars',
+              article_id: 2,
+              created_at: expect.any(String),
+            })
+          );
         });
     });
   });
