@@ -79,7 +79,7 @@ describe('Endpoints', () => {
   describe('GET /api/articles/:article_id', () => {
     test('status 200: responds with article object', () => {
       return request(app)
-        .get('/api/article/2')
+        .get('/api/articles/2')
         .expect(200)
         .then(({ body: { article } }) => {
           expect(article).toEqual({
@@ -96,7 +96,7 @@ describe('Endpoints', () => {
     });
     test('status 400: invalid id responds with msg Bad request', () => {
       return request(app)
-        .get('/api/article/not-a-number')
+        .get('/api/articles/not-a-number')
         .expect(400)
         .then(({ body }) => {
           expect(body.msg).toBe('Bad request');
@@ -104,7 +104,7 @@ describe('Endpoints', () => {
     });
     test('status 404: valid but non-existent id responds with msg ID not found', () => {
       return request(app)
-        .get('/api/article/7777777')
+        .get('/api/articles/7777777')
         .expect(404)
         .then(({ body }) => {
           expect(body.msg).toBe('ID not found');
@@ -186,5 +186,41 @@ describe('Endpoints', () => {
           );
         });
     });
+  });
+  test('status 400: invalid id responds with msg Bad request', () => {
+    return request(app)
+      .post('/api/articles/nan/comments')
+      .send({ username: 'icellusedkars', body: 'So good it hurts' })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad request');
+      });
+  });
+  test('status 404: valid but non-existent id responds with msg ID not found', () => {
+    return request(app)
+      .post('/api/articles/222/comments')
+      .send({ username: 'icellusedkars', body: 'So good it hurts' })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Id not found');
+      });
+  });
+  test('status 400: invalid body key', () => {
+    return request(app)
+      .post('/api/articles/2/comments')
+      .send({ badKey: 'icellusedkars', body: 'So good it hurts' })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad request');
+      });
+  });
+  test('status 400: invalid body value', () => {
+    return request(app)
+      .post('/api/articles/2/comments')
+      .send({ username: 1, body: 'So good it hurts' })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad request');
+      });
   });
 });
